@@ -28,8 +28,8 @@ s3_file = S3File(s3_object)
 
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k  -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
           "640x360 -c:v:0 libx265 -b:v:0 400k  -s:v:1 960x540 -c:v:1 libx265 -b:v:1 600k -s:v:1 1280x720 -c:v:2 " \
-          "libx265 -b:v:1 1500k -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name video/master.m3u8  -f hls " \
-          "-hls_time 6 -hls_list_size 0 -hls_flags temp_file  video/segement%v/video.m3u8"
+          "libx265 -b:v:1 1500k -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name video2/master.m3u8  -f hls " \
+          "-hls_time 6 -hls_list_size 0 -hls_flags temp_file  video2/segement%v/video.m3u8"
 
 
 
