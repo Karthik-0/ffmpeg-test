@@ -62,7 +62,7 @@ def monitor(ffmpeg, duration, time_, process):
 
     # if "something happened":
     #     process.terminate()
-    upload_videos(ffmpeg, exclude_m3u8=True)
+    # upload_videos(ffmpeg, exclude_m3u8=True)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
     sys.stdout.flush()
@@ -80,8 +80,8 @@ class ProcessNew(Process):
         curr = 0
 
         while curr < s3_file.size:
-            self.process.stdin.buffer.write(s3_file.read(100000))
-            curr += 100000
+            self.process.stdin.buffer.write(s3_file.read(32000000))
+            curr += 32000000
         self.process.stdin.close()
         thread.join()
 
@@ -98,6 +98,6 @@ if __name__ == "__main__":
     print("Start Transcoding : ", AWS_SECRET_ACCESS_KEY)
     # input_stream()
     process_poc()
-    upload_dir("video")
+    # upload_dir("video")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
