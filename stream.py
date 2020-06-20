@@ -62,7 +62,6 @@ def monitor(ffmpeg, duration, time_, process):
 
     # if "something happened":
     #     process.terminate()
-    print("Line : ", ffmpeg)
     upload_videos(ffmpeg, exclude_m3u8=True)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
