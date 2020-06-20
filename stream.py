@@ -27,8 +27,8 @@ s3_object = s3.Object(bucket_name="media.testpress.in",
 s3_file = S3File(s3_object)
 
 command = "ffmpeg -i - -preset ultrafast -b:a 128k -c:v libx265  -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
-          "640x360 -b:v:0 400k -s:v:1 960x540 -b:v:1 600k -s:v:2 1280x720 " \
-          "-b:v:2 1500k -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name small_video6/master.m3u8  -f hls " \
+          "640x360 -c:v:0 libx265 -b:v:0 400k -s:v:1 960x540 -c:v:1 libx265 -b:v:1 600k -s:v:2 1280x720 " \
+          "-b:v:2 1500k -c:v:2 libx265 -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name small_video6/master.m3u8  -f hls " \
           "-hls_time 6 -hls_list_size 0 -hls_flags temp_file  small_video6/segement%v/video.m3u8"
 
 
