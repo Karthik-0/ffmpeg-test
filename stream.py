@@ -52,7 +52,7 @@ def upload_videos(line, exclude_m3u8=False):
 
     regex_pattern = re.compile("(Opening .* for writing)")
     if regex_pattern.search(line):
-        upload_dir("small_video3", exclude_files=exclude_files)
+        upload_dir("small_video4", exclude_files=exclude_files)
 
 
 def monitor(ffmpeg, duration, time_, process):
@@ -98,6 +98,6 @@ if __name__ == "__main__":
     print("Start Transcoding : ", AWS_SECRET_ACCESS_KEY)
     # input_stream()
     process_poc()
-    upload_dir("small_video3")
+    upload_dir("small_video4")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
