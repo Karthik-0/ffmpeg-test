@@ -19,10 +19,10 @@ s3 = boto3.resource("s3", aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                     aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
                     region_name="ap-southeast-1")
 
-s3_object = s3.Object(bucket_name="media.testpress.in",
-                      key="institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4")
 # s3_object = s3.Object(bucket_name="media.testpress.in",
-#                       key="institute/institute/demo/1c61861f5875407fa2e3c1531ef6a602.mp4")
+#                       key="institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4")
+s3_object = s3.Object(bucket_name="media.testpress.in",
+                      key="institute/institute/demo/1c61861f5875407fa2e3c1531ef6a602.mp4")
 
 s3_file = S3File(s3_object)
 
