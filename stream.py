@@ -27,9 +27,9 @@ s3_object = s3.Object(bucket_name="media.testpress.in",
 s3_file = S3File(s3_object)
 
 command = "ffmpeg -hwaccel cuda -i - -preset llhp -b:a 128k -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
-          "640x360 -c:v:0 h264_nvenc -b:v:0 400k -s:v:1 960x540 -c:v:1 h264_nvenc -b:v:1 600k -s:v:2 1280x720 " \
-          "-b:v:2 1500k -c:v:2 h264_nvenc -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_h264_llhp/master.m3u8  -f hls " \
-          "-hls_time 6 -hls_list_size 0 -hls_flags temp_file  big_video_h264_llhp/segement%v/video.m3u8"
+          "640x360 -c:v:0 hevc_nvenc -b:v:0 400k -s:v:1 960x540 -c:v:1 hevc_nvenc -b:v:1 600k -s:v:2 1280x720 " \
+          "-b:v:2 1500k -c:v:2 hevc_nvenc -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_hevc_llhp/master.m3u8  -f hls " \
+          "-hls_time 6 -hls_list_size 0 -hls_flags temp_file  big_video_hevc_llhp/segement%v/video.m3u8"
 
 
 
@@ -52,7 +52,7 @@ def upload_videos(line, exclude_m3u8=False):
 
     regex_pattern = re.compile("(Opening .* for writing)")
     if regex_pattern.search(line):
-        upload_dir("big_video_h264_llhp", exclude_files=exclude_files)
+        upload_dir("big_video_hevc_llhp", exclude_files=exclude_files)
 
 
 def monitor(ffmpeg, duration, time_, process):
@@ -98,6 +98,6 @@ if __name__ == "__main__":
     print("Start Transcoding : ", AWS_SECRET_ACCESS_KEY)
     # input_stream()
     process_poc()
-    upload_dir("big_video_h264_llhp")
+    upload_dir("big_video_hevc_llhp")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
