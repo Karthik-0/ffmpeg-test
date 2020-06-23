@@ -5,7 +5,7 @@ import boto3
 from new import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, REGION_NAME
 
 bucket = "media.testpress.in"
-destination = "institute/demo/upload_test/big_video_g4_4x_libx"
+destination = "institute/demo/upload_test/big_video_cuda_g4_4x_hevec_llhp"
 
 client = boto3.client("s3", aws_access_key_id=AWS_ACCESS_KEY_ID,
                       aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
