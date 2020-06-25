@@ -33,8 +33,9 @@ s3_file = S3File(s3_object)
 
 command = "ffmpeg -hwaccel cuda -i - -c:a aac -ar 48000 -b:a 128k " \
           "-c:v h264_nvenc -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
+
+command1 = "ffmpeg -hwaccel cuda -i - -c:a aac -ar 48000 -b:a 128k " \
           "-c:v h264_nvenc -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
-          "-c:v h264_nvenc -s 854x480 -b:v 400k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/480p/video%d.ts' big_video_multi_op/480p/video.m3u8"
 
 
 def input_stream():
@@ -66,13 +67,14 @@ def monitor(ffmpeg, duration, time_, process):
 
     # if "something happened":
     #     process.terminate()
+    print(ffmpeg)
     upload_videos(ffmpeg, exclude_m3u8=True)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
     sys.stdout.flush()
 
 
-def process_poc():
+def process_poc(command):
     process = ProcessNew(command, monitor)
     process.run()
 
@@ -99,9 +101,12 @@ class ProcessNew(Process):
 
 if __name__ == "__main__":
     from new import AWS_SECRET_ACCESS_KEY
-    print("Start Transcoding : ", AWS_SECRET_ACCESS_KEY)
     # input_stream()
-    process_poc()
+    a = input("Enter number : ")
+    if int(a) == 1:
+        process_poc(command)
+    else:
+        process_poc(command1)
     upload_dir("big_video_multi_op")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
