@@ -28,13 +28,13 @@ s3_file = S3File(s3_object)
 
 # command = "ffmpeg -hwaccel cuda -c:v h264_cuvid -i - -zerolatency -preset medium -b:a 128k -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
 #           "640x360 -c:v:0 h264_nvenc -b:v:0 400k -s:v:1 960x540 -c:v:1 h264_nvenc -b:v:1 600k -s:v:2 1280x720 " \
-#           "-b:v:2 1500k -c:v:2 h264_nvenc -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_hevc_llhp2/master.m3u8  -f hls " \
-#           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_hevc_llhp2/segement%v/video.m3u8"
+#           "-b:v:2 1500k -c:v:2 h264_nvenc -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
+#           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v libx264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'video/720p/video%d.ts' video/720p/video.m3u8" \
-          "-c:v libx264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'video/540p/video%d.ts' video/540p/video.m3u8 " \
-          "-c:v libx264 -s 854x480 -b:v 400k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'video/480p/video%d.ts' video/480p/video.m3u8"
+          "-c:v libx264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8" \
+          "-c:v libx264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
+          "-c:v libx264 -s 854x480 -b:v 400k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/480p/video%d.ts' big_video_multi_op/480p/video.m3u8"
 
 
 def input_stream():
@@ -56,7 +56,7 @@ def upload_videos(line, exclude_m3u8=False):
 
     regex_pattern = re.compile("(Opening .* for writing)")
     if regex_pattern.search(line):
-        upload_dir("big_video_hevc_llhp2", exclude_files=exclude_files)
+        upload_dir("big_video_multi_op", exclude_files=exclude_files)
 
 
 def monitor(ffmpeg, duration, time_, process):
@@ -102,6 +102,6 @@ if __name__ == "__main__":
     print("Start Transcoding : ", AWS_SECRET_ACCESS_KEY)
     # input_stream()
     process_poc()
-    upload_dir("big_video_hevc_llhp2")
+    upload_dir("big_video_multi_op")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
