@@ -31,10 +31,10 @@ s3_file = S3File(s3_object)
 #           "-b:v:2 1500k -c:v:2 h264_nvenc -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
-command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v libx264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
-          "-c:v libx264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
-          "-c:v libx264 -s 854x480 -b:v 400k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/480p/video%d.ts' big_video_multi_op/480p/video.m3u8"
+command = "ffmpeg -hwaccel cuda -i - -c:a aac -ar 48000 -b:a 128k " \
+          "-c:v h264_nvenc -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
+          "-c:v h264_nvenc -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
+          "-c:v h264_nvenc -s 854x480 -b:v 400k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/480p/video%d.ts' big_video_multi_op/480p/video.m3u8"
 
 
 def input_stream():
