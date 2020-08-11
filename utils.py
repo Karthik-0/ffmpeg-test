@@ -5,7 +5,6 @@ import boto3
 from new import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, REGION_NAME
 
 bucket = "media.testpress.in"
-destination = "institute/demo/upload_test/hetzner_parallel"
 
 client = boto3.client("s3", aws_access_key_id=AWS_ACCESS_KEY_ID,
                       aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -19,7 +18,7 @@ def delete(path):
         print("Unable to delete %s..." % path)
 
 
-def upload_dir(local_dir, exclude_files=[]):
+def upload_dir(local_dir, destination, exclude_files=[]):
     for root, dirs, files in os.walk(local_dir):
         for filename in files:
 
@@ -44,4 +43,4 @@ def upload_dir(local_dir, exclude_files=[]):
 
 
 if __name__ == "__main__":
-    upload_dir("video")
+    upload_dir("video", "institute/demo/upload_test/hetzner_parallel")
