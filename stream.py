@@ -5,9 +5,9 @@ from subprocess import Popen, PIPE
 import threading
 import logging
 import re
-from botocore.exceptions import ClientError
 
 import boto3
+
 
 from main import Process
 from new2 import S3File
@@ -19,10 +19,10 @@ s3 = boto3.resource("s3", aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                     aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
                     region_name="ap-southeast-1")
 
-# s3_object = s3.Object(bucket_name="media.testpress.in",
-#                       key="institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4")
 s3_object = s3.Object(bucket_name="media.testpress.in",
-                      key="institute/institute/demo/1c61861f5875407fa2e3c1531ef6a602.mp4")
+                      key="institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4")
+# s3_object = s3.Object(bucket_name="media.testpress.in",
+#                       key="institute/institute/demo/bbb_sunflower_1080p_60fps_normal.mp4")
 
 s3_file = S3File(s3_object)
 
@@ -31,11 +31,11 @@ s3_file = S3File(s3_object)
 #           "-b:v:2 1500k -c:v:2 h264_nvenc -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
-command = "ffmpeg -hwaccel cuda -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264_nvenc -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
+command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
 
-command1 = "ffmpeg -hwaccel cuda -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264_nvenc -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
+command1 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
+          "-c:v h264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
 
 
 def input_stream():
@@ -61,14 +61,8 @@ def upload_videos(line, exclude_m3u8=False):
 
 
 def monitor(ffmpeg, duration, time_, process):
-    # You can update a field in your database or log it to a file
-    # You can also create a socket connection and show a progress bar to users
-    # logging.info(ffmpeg) or print(ffmpeg)
-
-    # if "something happened":
-    #     process.terminate()
-    print(ffmpeg)
-    upload_videos(ffmpeg, exclude_m3u8=True)
+    # upload_videos(ffmpeg, exclude_m3u8=True)
+    # print(ffmpeg)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
     sys.stdout.flush()
@@ -102,11 +96,9 @@ class ProcessNew(Process):
 if __name__ == "__main__":
     from new import AWS_SECRET_ACCESS_KEY
     # input_stream()
-    a = input("Enter number : ")
-    if int(a) == 1:
-        process_poc(command)
-    else:
-        process_poc(command1)
-    upload_dir("big_video_multi_op")
+    # a = input("Enter number : ")
+    process_poc(command1)
+    # process_poc(command1)
+    # upload_dir("big_video_multi_op")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
