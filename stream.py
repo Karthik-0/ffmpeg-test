@@ -13,6 +13,8 @@ from main import Process
 from new2 import S3File
 from utils import upload_dir
 
+upload_directory = "big_video_multi_op"
+
 params = {'Bucket': "media.testpress.in", "Key": "demo/testing/%v/"}
 
 s3 = boto3.resource("s3", aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
@@ -32,11 +34,13 @@ s3_file = S3File(s3_object)
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 " \
 
 command1 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
+          "-c:v h264 -s 960x540 -b:v 600k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 " \
 
+command2 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
+           "-c:v h264 -s 640x360 -b:v 500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/360p/video%d.ts' big_video_multi_op/360p/video.m3u8 " \
 
 def input_stream():
     # Working method ; Do not edit this
@@ -57,11 +61,12 @@ def upload_videos(line, exclude_m3u8=False):
 
     regex_pattern = re.compile("(Opening .* for writing)")
     if regex_pattern.search(line):
-        upload_dir("big_video_multi_op", exclude_files=exclude_files)
+        print("Upload Directory", upload_directory)
+        upload_dir(upload_directory, exclude_files=exclude_files)
 
 
 def monitor(ffmpeg, duration, time_, process):
-    # upload_videos(ffmpeg, exclude_m3u8=True)
+    upload_videos(ffmpeg, exclude_m3u8=True)
     # print(ffmpeg)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
@@ -96,9 +101,16 @@ class ProcessNew(Process):
 if __name__ == "__main__":
     from new import AWS_SECRET_ACCESS_KEY
     # input_stream()
-    # a = input("Enter number : ")
-    process_poc(command1)
-    # process_poc(command1)
-    # upload_dir("big_video_multi_op")
+    a = input("Enter number : ")
+    if str(a) == '720p':
+        upload_directory = "big_video_multi_op/720p"
+        process_poc(command)
+    elif str(a) == "540p":
+        upload_directory = "big_video_multi_op/540p"
+        process_poc(command1)
+    else:
+        upload_directory = "big_video_multi_op/360p"
+        process_poc(command1)
+    upload_dir("big_video_multi_op")
 
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
