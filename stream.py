@@ -22,7 +22,7 @@ s3 = boto3.resource("s3", aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                     region_name="ap-southeast-1")
 
 s3_object = s3.Object(bucket_name="media.testpress.in",
-                      key="institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4")
+                      key="institute/institute/demo/1c61861f5875407fa2e3c1531ef6a602.mp4")
 # s3_object = s3.Object(bucket_name="media.testpress.in",
 #                       key="institute/institute/demo/bbb_sunflower_1080p_60fps_normal.mp4")
 
@@ -34,13 +34,13 @@ s3_file = S3File(s3_object)
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8 "
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8"
 
 command1 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8 "
+          "-c:v h264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8"
 
 command2 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-           "-c:v h264 -s 640x360 -b:v 500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/360p/video%d.ts' big_video_multi_op/360p/video.m3u8 "
+           "-c:v h264 -s 640x360 -b:v 500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/360p/video%d.ts' big_video_multi_op/360p/video.m3u8"
 
 def input_stream():
     # Working method ; Do not edit this
@@ -62,12 +62,12 @@ def upload_videos(line, exclude_m3u8=False):
     regex_pattern = re.compile("(Opening .* for writing)")
     if regex_pattern.search(line):
         print("Upload Directory", upload_directory)
-        upload_dir(upload_directory, exclude_files=exclude_files)
+        # upload_dir(upload_directory, exclude_files=exclude_files)
 
 
 def monitor(ffmpeg, duration, time_, process):
     upload_videos(ffmpeg, exclude_m3u8=True)
-    # print(ffmpeg)
+    print(ffmpeg)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
     sys.stdout.flush()
