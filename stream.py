@@ -5,6 +5,7 @@ from subprocess import Popen, PIPE
 import threading
 import logging
 import re
+import random
 
 import boto3
 
@@ -29,13 +30,13 @@ s3_object = s3.Object(bucket_name="media.testpress.in",
 
 s3_file = S3File(s3_object)
 
-command = "ffmpeg -i - -preset medium -b:a 128k -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
-          "640x360 -c:v:0 h264 -b:v:0 400k -s:v:1 960x540 -c:v:1 h264 -b:v:1 600k -s:v:2 1280x720 " \
-          "-b:v:2 1500k -c:v:2 h264 -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
-          "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
+# command = "ffmpeg -i - -preset medium -b:a 128k -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
+#           "640x360 -c:v:0 h264 -b:v:0 400k -s:v:1 960x540 -c:v:1 h264 -b:v:1 600k -s:v:2 1280x720 " \
+#           "-b:v:2 1500k -c:v:2 h264 -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
+#           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
-# command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-#           "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8"
+command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8"
 
 command1 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
           "-c:v h264 -s 960x540 -b:v 600k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/540p/video%d.ts' big_video_multi_op/540p/video.m3u8"
@@ -100,23 +101,13 @@ class ProcessNew(Process):
 
 if __name__ == "__main__":
     from new import AWS_SECRET_ACCESS_KEY
-    upload_destination = "institute/demo/upload_test/hetzner_combined/"
-    upload_directory = "big_video_multi_op"
-    process_poc(command)
+    upload_destination = "institute/demo/upload_test/hetzner_combined1/"
+    upload_directory = "big_video_multi_op/"
     # a = input("Enter number : ")
-    # if str(a) == '720p':
-    #     upload_destination = "institute/demo/upload_test/hetzner_parallel/720p"
-    #     upload_directory = "big_video_multi_op/720p"
-    #     process_poc(command)
-    #     upload_dir(upload_directory, upload_directory)
-    # elif str(a) == "540p":
-    #     upload_destination = "institute/demo/upload_test/hetzner_parallel/540p"
-    #     upload_directory = "big_video_multi_op/540p"
-    #     process_poc(command1)
-    #     upload_dir(upload_directory, upload_directory)
-    # else:
-    #     upload_destination = "institute/demo/upload_test/hetzner_parallel/360p"
-    #     upload_directory = "big_video_multi_op/360p"
-    #     process_poc(command2)
-    #     upload_dir(upload_directory, upload_directory)
+    random_number = random.randint(0, 10000)
+    upload_destination += str(random_number)
+    upload_directory += str(random_number)
+    os.mkdir(upload_directory)
+    process_poc(command)
+    upload_dir(upload_directory, upload_directory)
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
