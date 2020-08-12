@@ -29,7 +29,7 @@ s3_object = s3.Object(bucket_name="media.testpress.in",
 
 s3_file = S3File(s3_object)
 
-command = "ffmpeg -i - -zerolatency -preset medium -b:a 128k -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
+command = "ffmpeg -i - -preset medium -b:a 128k -map 0:0 -map 0:1 -map 0:0 -map 0:1 -map 0:0 -map 0:1 -s:v:0 " \
           "640x360 -c:v:0 h264 -b:v:0 400k -s:v:1 960x540 -c:v:1 h264 -b:v:1 600k -s:v:2 1280x720 " \
           "-b:v:2 1500k -c:v:2 h264 -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
@@ -67,7 +67,7 @@ def upload_videos(line, exclude_m3u8=False):
 
 def monitor(ffmpeg, duration, time_, process):
     upload_videos(ffmpeg, exclude_m3u8=True)
-    print(ffmpeg)
+    # print(ffmpeg)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
     sys.stdout.flush()
