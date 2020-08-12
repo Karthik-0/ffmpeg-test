@@ -36,13 +36,13 @@ s3_file = S3File(s3_object)
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
 sample_command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}_720p/video%d.ts' {}_720p/video.m3u8"
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast -hls_key_info_file enc.keyinfo -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}_720p/video%d.ts' {}_720p/video.m3u8"
 
 sample_command1 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-                 "-c:v h264 -s 960x540 -b:v 600k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}_540p/video%d.ts' {}_540p/video.m3u8"
+                 "-c:v h264 -s 960x540 -b:v 600k -preset veryfast -hls_key_info_file enc.keyinfo  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}_540p/video%d.ts' {}_540p/video.m3u8"
 
 sample_command2 = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-                 "-c:v h264 -s 640x360 -b:v 500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}_360p/video%d.ts' {}_360p/video.m3u8"
+                 "-c:v h264 -s 640x360 -b:v 500k -preset veryfast -hls_key_info_file enc.keyinfo  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}_360p/video%d.ts' {}_360p/video.m3u8"
 
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
           "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8"
@@ -77,7 +77,7 @@ def upload_videos(line, exclude_m3u8=False):
 
 def monitor(ffmpeg, duration, time_, process):
     upload_videos(ffmpeg, exclude_m3u8=True)
-    # print(ffmpeg)
+    print(ffmpeg)
     per = round(time_ / duration * 100)
     sys.stdout.write("\rTranscoding...(%s%%) [%s%s]" % (per, '#' * per, '-' * (100 - per)))
     sys.stdout.flush()
