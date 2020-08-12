@@ -35,6 +35,9 @@ s3_file = S3File(s3_object)
 #           "-b:v:2 1500k -c:v:2 h264 -var_stream_map 'v:0,a:0 v:1,a:1 v:2,a:2'  -master_pl_name big_video_multi_op/master.m3u8  -f hls " \
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
+sample_command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}/video%d.ts' {}/video.m3u8"
+
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
           "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8"
 
@@ -108,6 +111,7 @@ if __name__ == "__main__":
     upload_destination += str(random_number)
     upload_directory += str(random_number)
     os.mkdir(upload_directory)
+    command = sample_command.format(upload_directory, upload_directory)
     process_poc(command)
     upload_dir(upload_directory, upload_directory)
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
