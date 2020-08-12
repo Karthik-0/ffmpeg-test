@@ -36,7 +36,7 @@ s3_file = S3File(s3_object)
 #           "-hls_time 10 -hls_list_size 0 -hls_flags temp_file  big_video_multi_op/segement%v/video.m3u8"
 
 sample_command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
-          "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}/video%d.ts' {}/video.m3u8"
+          "-c:v h264 -s 1280x720 -b:v 1500k -preset veryfast  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename '{}/video%d.ts' {}/video.m3u8"
 
 command = "ffmpeg -i - -c:a aac -ar 48000 -b:a 128k " \
           "-c:v h264 -s 1280x720 -b:v 1500k -preset faster  -f hls -hls_list_size 0 -hls_time 6 -hls_segment_filename 'big_video_multi_op/720p/video%d.ts' big_video_multi_op/720p/video.m3u8"
