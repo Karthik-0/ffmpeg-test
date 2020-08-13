@@ -6,6 +6,7 @@ import threading
 import logging
 import re
 import random
+import time
 
 import boto3
 
@@ -116,6 +117,9 @@ if __name__ == "__main__":
     random_number = random.randint(0, 10000)
     upload_destination += str(random_number)
     upload_directory += str(random_number)
+    start = time.process_time()
+    print("Start time : ", start)
+
     # os.mkdir(upload_directory)
     if str(a) == '1':
         os.mkdir(upload_directory+"_720p")
@@ -128,4 +132,6 @@ if __name__ == "__main__":
         command = sample_command2.format(upload_directory, upload_directory)
     process_poc(command)
     upload_dir(upload_directory, upload_directory)
+    print("End Time ", time.process_time() - start)
+
 #  https://s3-ap-southeast-1.amazonaws.com/media.testpress.in/institute/sandbox/videos/232ae54d31614f3f95c46b2dce2c2975.mp4
